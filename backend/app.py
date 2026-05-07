@@ -72,6 +72,15 @@ def get_analytics():
     result = merged[['name', 'completions']].to_dict(orient='records')
     return jsonify(result)
 
+@app.route('/habits/<int:habit_id>',methods=['DELETE'])
+def del_habits(habit_id):
+    conn = sqlite3.connect('habits.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM habits WHERE id = ?', (habit_id,))
+    cursor.execute('DELETE FROM habits_log WHERE habit_id = ?', (habit_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Habit deleted'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
