@@ -5,6 +5,7 @@ function App() {
   const [newhabit,setNewHabit] = useState('');
   const [analytics,setAnalytics] = useState([]);
   const [completedtoday, setCompletedToday] = useState([]);
+  const [habiterror, setHabitError] = useState('');
 
   const fetchHabits = () => {
     fetch('http://localhost:5000/habits')
@@ -77,11 +78,25 @@ function App() {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({name: newhabit})
       })
-    .then(() => fetchHabits())
-    .then(() => setNewHabit(''))
-    .then(() => fetchAnalytics())
+      .then(res => {
+        if (res.status === 400)
+        {
+          setHabitError('Already exists');
+        }
+        else {
+          fetchHabits();
+          setNewHabit('');
+          setHabitError('')
+        }
+      }
+
+
+      )
       }
       >Add Habit</button>
+      {habiterror && 
+      <span style={{marginLeft:'10px', color:'red'}}>{habiterror}</span>
+      }
     </div>
   );
 }

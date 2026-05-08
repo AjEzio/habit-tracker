@@ -32,6 +32,11 @@ def add_habits():
     name = data.get('name')
     conn = sqlite3.connect('habits.db')
     cursor = conn.cursor()
+    existing = conn.execute('SELECT * FROM habits WHERE name = ?',(name,)).fetchone()
+    if existing:
+        conn.close()
+        return jsonify({'message':'Already exists'}), 400
+        
     cursor.execute('INSERT INTO habits (name) VALUES (?)', (name,))
     conn.commit()
     conn.close()
