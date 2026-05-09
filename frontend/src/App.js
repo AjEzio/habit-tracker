@@ -6,6 +6,7 @@ function App() {
   const [analytics,setAnalytics] = useState([]);
   const [completedtoday, setCompletedToday] = useState([]);
   const [habiterror, setHabitError] = useState('');
+  const [view, setView] = useState('habits')
 
   const fetchHabits = () => {
     fetch('http://localhost:5000/habits')
@@ -53,6 +54,11 @@ function App() {
   return (
     <div>
       <h1>Habit Tracker</h1>
+      <button onClick={() => setView('habits')}>Habits</button>
+      <button onClick={() => setView('analytics')}>Analytics</button>
+      {view === 'habits' && (
+      <div>
+        <h2>Habits</h2>
       {habits.map(habit => (
         <div className='habit-row' key={habit.id}>
         <span className='habit-name'>{habit.name}</span>
@@ -61,12 +67,6 @@ function App() {
         : <button className='btn-complete'onClick={() => completeHabit(habit.id)}>✔</button>
         }
        <button className='btn-delete' onClick={() => deleteHabit(habit.id)}>X</button>
-        </div>
-      ))}
-      <h2>Analytics</h2>
-      {analytics.map(item => (
-        <div className='analytics-row' key={item.name}>
-          {item.name} : {item.completions} completions
         </div>
       ))}
       <div className='add-section'>
@@ -101,6 +101,19 @@ function App() {
       <span style={{marginLeft:'10px', color:'red'}}>{habiterror}</span>
       }
       </div>
+      
+      </div>
+      )}
+    { view === 'analytics' && (
+      <div>
+      <h2>Analytics</h2>
+      {analytics.map(item => (
+        <div className='analytics-row' key={item.name}>
+          {item.name} : {item.completions} completions
+        </div>
+      ))}
+      </div>
+    )} 
     </div>
   );
 }
