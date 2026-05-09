@@ -54,20 +54,22 @@ function App() {
     <div>
       <h1>Habit Tracker</h1>
       {habits.map(habit => (
-        <p key={habit.id}>{habit.name}
+        <div className='habit-row' key={habit.id}>
+        <span className='habit-name'>{habit.name}</span>
         {completedtoday.includes(habit.id)
-        ? <button >Completed</button>
-        : <button onClick={() => completeHabit(habit.id)}>✔</button>
+        ? <button className='btn-completed' >Completed</button>
+        : <button className='btn-complete'onClick={() => completeHabit(habit.id)}>✔</button>
         }
-       <button onClick={() => deleteHabit(habit.id)}>X</button>
-        </p>
+       <button className='btn-delete' onClick={() => deleteHabit(habit.id)}>X</button>
+        </div>
       ))}
       <h2>Analytics</h2>
       {analytics.map(item => (
-        <p key={item.name}>
-          {item.name}:{item.completions} completions
-        </p>
+        <div className='analytics-row' key={item.name}>
+          {item.name} : {item.completions} completions
+        </div>
       ))}
+      <div className='add-section'>
       <input type='text'
       value = {newhabit}
       onChange = {(e) => setNewHabit(e.target.value)}
@@ -85,6 +87,7 @@ function App() {
         }
         else {
           fetchHabits();
+          fetchAnalytics();
           setNewHabit('');
           setHabitError('')
         }
@@ -97,6 +100,7 @@ function App() {
       {habiterror && 
       <span style={{marginLeft:'10px', color:'red'}}>{habiterror}</span>
       }
+      </div>
     </div>
   );
 }
